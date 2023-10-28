@@ -31,6 +31,12 @@ class GameState():
         self.board[move.startRow][move.startCol] = move.pieceMoved
         self.board[move.endRow][move.endCol] = move.pieceCaptured
         self.whiteToMove = not self.whiteToMove
+    
+    def getValidMoves(self):
+        pass
+
+    def getAllPossibleMoves(self):
+        pass
         
 
 
