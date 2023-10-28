@@ -39,7 +39,7 @@ def main():
                     sqSelected = (row,col)
                     playerClicks.append(sqSelected)
                 if len(playerClicks) == 2:
-                    
+                    pass
 
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
