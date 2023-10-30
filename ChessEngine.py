@@ -119,10 +119,15 @@ class GameState():
                 moves.append(Move((r,c), (rd,cd), self.board))
 
     def getQueenMoves(self, r, c, moves):
-        pass
+        self.moveFunctions['B'](r,c,moves)
+        self.moveFunctions['R'](r,c,moves)
     def getKingMoves(self, r, c, moves):
-        pass
-    
+        kingMoves = ((1,1), (1,-1), (-1,1), (-1,-1), (1,0), (-1,0), (0, 1), (0,-1))
+        for rm,cm in kingMoves:
+            rd = r+rm
+            cd = c + cm
+            if 0<= rd < len(self.board) and 0<= cd < len(self.board) and (self.board[rd][cd] == "--" or (self.whiteToMove == (self.board[rd][cd][0] == 'b'))):
+                moves.append(Move((r,c), (rd,cd), self.board))
     
 
         
