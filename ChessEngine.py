@@ -68,7 +68,34 @@ class GameState():
                 moves.append(Move((r,c), (r+1,c+1), self.board))
 
     def getRookMoves(self, r, c, moves):
-        pass
+        current = r + 1
+        while current < len(self.board) and self.board[current][c] == "--":
+            moves.append(Move((r,c), (current,c), self.board))
+            current += 1
+        if current < len(self.board) and (self.whiteToMove == (self.board[current][c][0] == 'b')):
+            moves.append(Move((r,c), (current,c), self.board))
+        
+        current = r -1
+        while current >= 0 and self.board[current][c] == "--":
+            moves.append(Move((r,c), (current,c), self.board))
+            current -= 1
+        if current >= 0 and (self.whiteToMove == (self.board[current][c][0] == 'b')):
+            moves.append(Move((r,c), (current,c), self.board))
+        
+        current = c + 1
+        while current < len(self.board) and self.board[r][current] == "--":
+            moves.append(Move((r,c), (r,current), self.board))
+            current += 1
+        if current < len(self.board) and (self.whiteToMove == (self.board[r][current][0] == 'b')):
+            moves.append(Move((r,c), (r,current), self.board))
+        
+        current = c -1
+        while current >= 0 and self.board[r][current] == "--":
+            moves.append(Move((r,c), (r,current), self.board))
+            current -= 1
+        if current >= 0 and (self.whiteToMove == (self.board[r][current][0] == 'b')):
+            moves.append(Move((r,c), (r,current), self.board))
+
     def getKnightMoves(self, r, c, moves):
         pass
     def getBishopMoves(self, r, c, moves):
