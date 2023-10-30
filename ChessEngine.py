@@ -97,7 +97,14 @@ class GameState():
             moves.append(Move((r,c), (r,current), self.board))
 
     def getKnightMoves(self, r, c, moves):
-        pass
+        knightMoves = ((2,1), (2,-1), (-2,1), (-2,-1), (1,2), (1,-2), (-1,2), (-1,-2))
+
+        for rm,cm in knightMoves:
+            rd = r+rm
+            cd = c + cm
+            if 0<= rd < len(self.board) and 0<= cd < len(self.board) and (self.board[rd][cd] == "--" or (self.whiteToMove == (self.board[rd][cd][0] == 'b'))):
+                moves.append(Move((r,c), (rd,cd), self.board))
+        
     def getBishopMoves(self, r, c, moves):
         pass
     def getQueenMoves(self, r, c, moves):
