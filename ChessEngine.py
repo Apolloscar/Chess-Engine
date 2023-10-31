@@ -19,8 +19,9 @@ class GameState():
         self.moveLog = []
         self.whiteKingLocation = (7,4)
         self.blackKingLocation = (0,4)
-        self.checkMate = False
-        self.staleMate = False
+        self.inCheck = False
+        self.pins = []
+        self.checks = []
 
     # not work for casteling el passant and pawn promotion
     def makeMove(self, move):
@@ -48,7 +49,8 @@ class GameState():
             self.blackKingLocation = (move.startRow, move.startCol)
     
     def getValidMoves(self):
-        moves = self.getAllPossibleMoves()
+        moves = []
+        self.inCheck, self.pins, self.checks = self.checkForPinsAndChecks()
 
         for i in range(len(moves) - 1, -1,-1):
             self.makeMove(moves[i])
