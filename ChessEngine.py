@@ -34,6 +34,9 @@ class GameState():
             self.whiteKingLocation = (move.endRow, move.endCol)
         if move.pieceMoved == "bK":
             self.blackKingLocation = (move.endRow, move.endCol)
+
+        if move.isPromotion:
+            self.board[move.endRow][move.endCol] = move.pieceMoved[0] + 'Q'
     
     def undoMove(self):
         if len(self.moveLog) == 0:
@@ -326,6 +329,11 @@ class Move():
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+
+        self.isPromotion = False
+        if (self.pieceMoved == "wp" and self.endRow == 0) or (self.pieceMoved == "bp" and self.endRow == 7):
+            self.isPromotion = True
+
         self.moveID = self.startRow*1000 + self.startCol*100 +self.endRow*10 +self.endCol
 
     def __eq__(self, other):
