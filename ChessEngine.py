@@ -81,7 +81,7 @@ class GameState():
                 for i in range(len(moves) - 1, -1,-1):
                     if moves[i].pieceMoved[1] != 'K':
                         if not (moves[i].endRow, moves[i].endCol) in validSquares:
-                            moves.remove(moves.remove(moves[i]))
+                            moves.remove(moves[i])
             else:
                 self.getKingMoves(kingRow,kingCol,moves)
 
@@ -162,7 +162,7 @@ class GameState():
         pinDirection = ()
         for i in range(len(self.pins)-1,-1,-1):
             if self.pins[i][0] == r and self.pins[i][1] == c:
-                piecePinned == True
+                piecePinned = True
                 pinDirection = (self.pins[i][2], self.pins[i][3])
                 self.pins.remove(self.pins[i])
                 break
@@ -183,10 +183,10 @@ class GameState():
         else:
             if self.board[r+1][c] == "--":
                 if not piecePinned or pinDirection == (1,0):
-                    if not piecePinned or pinDirection == (1,0):
-                        moves.append(Move((r,c), (r+1,c), self.board))
-                        if r == 1 and self.board[r+2][c] == "--":
-                            moves.append(Move((r,c), (r+2,c), self.board))
+                    moves.append(Move((r,c), (r+1,c), self.board))
+                    if r == 1 and self.board[r+2][c] == "--":
+                        moves.append(Move((r,c), (r+2,c), self.board))
+                
 
             if c-1 >= 0 and  self.board[r+1][c-1][0] == "w" and (not piecePinned or pinDirection == (1,-1)):
                 moves.append(Move((r,c), (r+1,c-1), self.board))
