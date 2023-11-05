@@ -11,7 +11,7 @@ MAX_FPS = 15
 IMAGES = {}
 
 def loadImages():
-    pieces = ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR", "wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR", "wp", "bp"]
+    pieces = ["bR", "bN", "bB", "bQ", "bK", "wR", "wN", "wB", "wQ", "wK", "wp", "bp"]
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("images/"+ piece + ".png"), (SQ_SIZE, SQ_SIZE))
 
@@ -46,7 +46,10 @@ def main():
                     move = ChessEngine.Move(playerClicks[0],playerClicks[1], gs.board)
                     for i in range(len(validMoves)):
                         if move == validMoves[i]:
-                            gs.makeMove(validMoves[i])
+                            if move.isPromotion:
+                                drawPromotion(screen,gs)
+    
+                            gs.makeMove(validMoves[i],)
                             moveMade = True
                             sqSelected = ()
                             playerClicks = []
@@ -59,7 +62,9 @@ def main():
         if moveMade:
             validMoves = gs.getValidMoves()
             moveMade = False
+        
         drawGameState(screen, gs)
+        
         clock.tick(MAX_FPS)
         p.display.flip()
         
@@ -83,5 +88,27 @@ def drawPieces(screen, board):
             piece = board[row][col]
             if piece != "--":
                 screen.blit(IMAGES[piece],p.Rect(col*SQ_SIZE,row*SQ_SIZE,SQ_SIZE,SQ_SIZE))
+
+def drawPromotion(screen,gs) -> str:
+    while True:
+        p.draw.rect(screen,(255,31,31), p.Rect(int(SQ_SIZE),int(2*SQ_SIZE), 6*SQ_SIZE,3*SQ_SIZE))
+        ally = ["wR", "wN", "wB", "wQ"] if gs.whiteToMove else ["bR", "bN", "bB", "bQ"]
+
+        for i in range(2,6):
+            screen.blit(IMAGES[ally[i]],p.Rect(i*SQ_SIZE,2*SQ_SIZE,SQ_SIZE,SQ_SIZE))
+        
+        p.display.flip()
+        
+        for q in p.event.get():
+            if q.type == p.QUIT:
+                break
+            elif q.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos()
+                col = location[0]//SQ_SIZE
+                row = location[1]//SQ_SIZE
+
+        
+    
+
 if __name__ == "__main__":
     main()
