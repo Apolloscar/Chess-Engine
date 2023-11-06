@@ -46,10 +46,14 @@ def main():
                     move = ChessEngine.Move(playerClicks[0],playerClicks[1], gs.board)
                     for i in range(len(validMoves)):
                         if move == validMoves[i]:
+                            newPiece = 'Q'
                             if move.isPromotion:
-                                drawPromotion(screen,gs)
+                                newPiece = drawPromotion(screen,gs)
+                                if newPiece == "-":
+                                    running = False
+                                    break
     
-                            gs.makeMove(validMoves[i],)
+                            gs.makeMove(validMoves[i], promotion=newPiece)
                             moveMade = True
                             sqSelected = ()
                             playerClicks = []
@@ -91,21 +95,32 @@ def drawPieces(screen, board):
 
 def drawPromotion(screen,gs) -> str:
     while True:
-        p.draw.rect(screen,(255,31,31), p.Rect(int(SQ_SIZE),int(2*SQ_SIZE), 6*SQ_SIZE,3*SQ_SIZE))
+        p.draw.rect(screen,(255,31,31), p.Rect(int(SQ_SIZE*1.5),int(2.5*SQ_SIZE), 5*SQ_SIZE,2*SQ_SIZE))
         ally = ["wR", "wN", "wB", "wQ"] if gs.whiteToMove else ["bR", "bN", "bB", "bQ"]
 
-        for i in range(2,6):
-            screen.blit(IMAGES[ally[i]],p.Rect(i*SQ_SIZE,2*SQ_SIZE,SQ_SIZE,SQ_SIZE))
+        for i in range(len(ally)):
+            screen.blit(IMAGES[ally[i]],p.Rect((2+i)*SQ_SIZE,3*SQ_SIZE,SQ_SIZE,SQ_SIZE))
+        
+
         
         p.display.flip()
         
         for q in p.event.get():
             if q.type == p.QUIT:
-                break
+                return "-"
             elif q.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos()
                 col = location[0]//SQ_SIZE
                 row = location[1]//SQ_SIZE
+
+                if (row,col) == (3,2):
+                    return 'R'
+                elif (row,col) == (3,3):
+                    return 'N'
+                elif (row,col) == (3,4):
+                    return 'B'
+                elif (row,col) == (3,5):
+                    return 'Q'
 
         
     
