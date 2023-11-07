@@ -24,6 +24,7 @@ def main():
     validMoves = gs.getValidMoves()
     moveMade = False
 
+    animate = False
     loadImages()
     running = True
     sqSelected = ()
@@ -55,6 +56,7 @@ def main():
     
                             gs.makeMove(validMoves[i], promotion=newPiece)
                             moveMade = True
+                            animate = True
                             sqSelected = ()
                             playerClicks = []
                     if not moveMade:
@@ -63,9 +65,14 @@ def main():
                 if q.key == p.K_z:
                     gs.undoMove()
                     moveMade = True
+                    animate = False
         if moveMade:
+            if animate:
+                animateMove(gs.moveLog[-1], screen,gs.board,clock)
+                
             validMoves = gs.getValidMoves()
             moveMade = False
+            animate = False
         
         drawGameState(screen, gs, validMoves, sqSelected)
         
@@ -93,6 +100,7 @@ def drawGameState(screen, gs, validMoves, sqSelected):
 
 def drawBoard(screen):
     # light color, dark color
+    global colors
     colors = [(235,236,208), (119,149,86)]
     for i in range(DIMENSION):
         for j in range(DIMENSION):
@@ -137,7 +145,31 @@ def drawPromotion(screen,gs) -> str:
                     return 'Q'
 
 def animateMove(move,screen,board,clock):
-    pass
+    global colors
+    #places pieces will move through
+    coords = []
+    dr = move.endRow - move.startRow
+    dc = move.endCol - move.startCol
+    framesPerSquare = 10
+    frameCount = (abs(dr) + abs(dc)) * framesPerSquare
+
+    for frame in range(frameCount+1):
+        r, c = (move.startRow + dr*frame/frameCount, move.startCol + dc*frame/frameCount)
+        drawBoard(screen)
+        drawPieces(screen,board)
+
+        color  = colors[(move.endRow + move.endCol) %2]
+        endSquare = p.Rect(move.endCol*SQ_SIZE, move.endRow*SQ_SIZE, SQ_SIZE, SQ_SIZE)
+        p.draw.rect(screen, color, endSquare)
+        
+        if move.pieceCaptured != "--" and not move.isEmpassantMove:
+            
+            screen.blit(IMAGES[move.pieceCaptured], endSquare)
+
+        screen.blit(IMAGES[move.pieceMoved], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+        p.display.flip()
+        clock.tick(60)
+    
     
 
 if __name__ == "__main__":
