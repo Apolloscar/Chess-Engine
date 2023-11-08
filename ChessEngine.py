@@ -168,6 +168,12 @@ class GameState():
             moves = self.getAllPossibleMoves() 
         self.enpassantPossible = tempEnpassantPossible
         self.currentCastlingRight = tempCastlingPossible
+
+        if not moves:
+            if self.inCheck:
+                self.checkmate = True
+            else:
+                self.stalemate = True
         return moves
 
 
