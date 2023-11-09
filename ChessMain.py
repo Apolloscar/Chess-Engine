@@ -185,7 +185,7 @@ def animateMove(move,screen,board,clock):
         if move.pieceCaptured != "--" and not move.isEmpassantMove:
             
             screen.blit(IMAGES[move.pieceCaptured], endSquare)
-
+        
         screen.blit(IMAGES[move.pieceMoved], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
         p.display.flip()
         clock.tick(60)

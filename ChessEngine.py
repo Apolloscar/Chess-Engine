@@ -377,7 +377,9 @@ class GameState():
         rowMoves = (-1,-1,-1,0,0,1,1,1)
         colMoves = (-1,0,1,-1,1,-1,0,1)
         ally = 'w' if self.whiteToMove else 'b'
-
+        checkDirection = set()
+        for checks in self.checks:
+            checkDirection.add((checks[2],checks[3]))
         for i in range(8):
             endRow = r + rowMoves[i]
             endCol = c + colMoves[i]
@@ -389,13 +391,18 @@ class GameState():
                         self.whiteKingLocation = (endRow,endCol)
                     else:
                         self.blackKingLocation = (endRow,endCol)
+                        
+                        
+                        
                     inCheck, pins, checks = self.checkForPinsAndChecks()
-                    if not inCheck:
+                    if not inCheck and (-(endRow - r), -(endCol - c)) not in checkDirection:
                         moves.append(Move((r,c), (endRow,endCol), self.board))
                     if ally == 'w':
                         self.whiteKingLocation = (r,c)
                     else:
                         self.blackKingLocation = (r,c)
+                        
+                        
         self.getCastleMoves(r,c,moves,ally)
     
     def getCastleMoves(self, r,c,moves, ally):
