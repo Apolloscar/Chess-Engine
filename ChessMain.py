@@ -1,7 +1,7 @@
 ## Handle user input and display current Game state
 
 import pygame as p
-import ChessEngine
+import ChessEngine, ChessAI
 
 p.init()
 WIDTH, HEIGHT = 512, 512
@@ -30,12 +30,15 @@ def main():
     sqSelected = ()
     playerClicks = []
     gameOver = False
+    playerOne = True
+    playerTwo = False
     while running:
+        humanTurn =(playerOne and gs.whiteToMove) or (playerTwo and not gs.whiteToMove)
         for q in p.event.get():
             if q.type == p.QUIT:
                 running = False
             elif q.type == p.MOUSEBUTTONDOWN:
-                if not gameOver:
+                if not gameOver and humanTurn:
                     location = p.mouse.get_pos()
                     col = location[0]//SQ_SIZE
                     row = location[1]//SQ_SIZE
@@ -66,9 +69,14 @@ def main():
             elif q.type == p.KEYDOWN:
                 if q.key == p.K_z:
                     gs.undoMove()
+                    humanTurn =(playerOne and gs.whiteToMove) or (playerTwo and not gs.whiteToMove)
+                    while not humanTurn:
+                        gs.undoMove()
+                        humanTurn =(playerOne and gs.whiteToMove) or (playerTwo and not gs.whiteToMove)
                     moveMade = True
                     animate = False
                     gameOver = False
+                    
                     
                 if q.key == p.K_r:
                     gs = ChessEngine.GameState()
@@ -78,6 +86,12 @@ def main():
                     moveMade = False
                     animate = False
                     gameOver = False
+        if not gameOver and not humanTurn:
+            AIMove = ChessAI.findRandomMove(validMoves)
+            gs.makeMove(AIMove)
+            moveMade = True
+            animate = True
+        
                     
         if moveMade:
             if animate:
