@@ -101,7 +101,8 @@ class GameState():
             else:
                 self.board[move.endRow][move.endCol - 2] = self.board[move.endRow][move.endCol +1]
                 self.board[move.endRow][move.endCol + 1] = "--"
-    
+        self.stalemate = False
+        self.checkmate = False
     #update castle rights
     def updateCastleRights(self, move):
         if move.pieceMoved == "wK":

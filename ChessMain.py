@@ -68,6 +68,8 @@ def main():
                     gs.undoMove()
                     moveMade = True
                     animate = False
+                    gameOver = False
+                    
                 if q.key == p.K_r:
                     gs = ChessEngine.GameState()
                     validMoves = gs.getValidMoves()
@@ -185,7 +187,7 @@ def animateMove(move,screen,board,clock):
         if move.pieceCaptured != "--" and not move.isEmpassantMove:
             
             screen.blit(IMAGES[move.pieceCaptured], endSquare)
-        
+
         screen.blit(IMAGES[move.pieceMoved], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
         p.display.flip()
         clock.tick(60)
