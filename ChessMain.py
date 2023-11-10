@@ -87,7 +87,7 @@ def main():
                     animate = False
                     gameOver = False
         if not gameOver and not humanTurn:
-            AIMove = ChessAI.findRandomMove(validMoves)
+            AIMove = ChessAI.findBestMove(gs,validMoves)
             gs.makeMove(AIMove)
             moveMade = True
             animate = True
