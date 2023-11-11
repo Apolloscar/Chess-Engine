@@ -8,23 +8,38 @@ def findRandomMove(validMoves):
 
 def findBestMove(gs, validMoves):
     turnMultiplier = 1 if gs.whiteToMove else -1
-
-    maxScore = -CHECKMATE
+    bestPlayerMove = None
+    opponentMinMaxScore = CHECKMATE
+    random.shuffle(validMoves)
     for playerMove in validMoves:
         gs.makeMove(playerMove)
-
-        if gs.checkmate:
-            score = CHECKMATE
-        elif gs.stalemate:
-            score = STALEMATE
+        opponentsMoves = gs.getValidMoves()
+        if gs.stalemate:
+            opponentsMaxScore = STALEMATE
+        elif gs.checkmate:
+            opponentsMaxScore = -CHECKMATE
         else:
-            score = scoreMaterial(gs.board)*turnMultiplier
-        if score >  maxScore:
-            maxScore= score
-            bestMove = playerMove
+            opponentsMaxScore = -CHECKMATE
+            for opponentsMove in opponentsMoves:
+                gs.makeMove(opponentsMove)
+                gs.getValidMoves()
+                if gs.checkmate:
+                    score = CHECKMATE 
+                elif gs.stalemate:
+                    score = STALEMATE
+                else:
+                    score = scoreMaterial(gs.board)*-turnMultiplier
+                if score >  opponentsMaxScore:
+                    opponentsMaxScore= score
+                gs.undoMove()
+        if opponentMinMaxScore > opponentsMaxScore:
+            opponentMinMaxScore = opponentsMaxScore
+            bestPlayerMove = playerMove
         gs.undoMove()
-        print(score)
-    return bestMove
+    return bestPlayerMove
+
+def findMoveMinMax(gs, validMoves, depth):
+    pass
 
 
 def scoreMaterial(board):
